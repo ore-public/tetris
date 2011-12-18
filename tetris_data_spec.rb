@@ -1,4 +1,5 @@
 require 'tetris_data'
+require 'block'
 
 describe TetrisData do
   context '初期化(正常時)' do
@@ -6,16 +7,13 @@ describe TetrisData do
       @td = TetrisData.new 3, 4
     end
 
-    it { @td.image_table.should have(3).items }
-    it { @td.image_table[0].should have(4).items }
-    it { @td.image_table[1].should have(4).items }
-    it { @td.image_table[2].should have(4).items }
-    it { @td.image_table[3].should be_nil }
     it do
       @td.image_table.should == [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1]
       ]
     end
 
@@ -32,49 +30,81 @@ describe TetrisData do
 
   end
 
-  context 'ブロックの配置(正常時)' do
+  context 'ブロックの配置' do
     before do
       @td = TetrisData.new 3, 3
-      @td.set_block(1, 1)
+      @block = Block.new 1, 1
+      @td.set_block @block
     end
 
     it do
       @td.image_table.should == [
-        [0, 0, 0],
-        [0, 2, 0],
-        [0, 0, 0]
+        [1, 1, 1, 1],
+        [0, 0, 0, 1],
+        [0, 2, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
       ]
     end
   end
 
-  context 'ブロックの配置（異常)' do
+  context 'ブロックの消去' do
     before do
-      @td = TetrisData.new 2, 2
+      @td = TetrisData.new 3, 3
+      @block1 = Block.new 0, 0
+      @block2 = Block.new 1, 1
+      @td.set_block @block1
+      @td.set_block @block2
+      @td.remove_block @block2
     end
-    
-    it { lambda {@td.set_block(-1, 0)}.should raise_error }
-    it { lambda {@td.set_block(0, -1)}.should raise_error }
-    it { lambda {@td.set_block(-1, -1)}.should raise_error }
-    it { lambda {@td.set_block(0, 0)}.should_not raise_error }
 
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [2, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
   end
 
   context 'ブロックの右移動(移動可能)' do
     before do
       @td = TetrisData.new 3, 3
+      @block = Block.new 0, 1
+      @td.set_block @block
+      @td.right_block @block
     end
 
-    it '右移動'
-
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 0, 0, 1],
+        [0, 2, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
   end
 
   context 'ブロックの右移動(移動不可)' do
     before do
       @td = TetrisData.new 3, 3
+      @block = Block.new 2, 1
+      @td.set_block @block
+      @td.right_block @block
     end
 
-    it '右端で移動不可'
-    it '右側にFixブロックありで移動不可'
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 2, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
 
   end
 end

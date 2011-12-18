@@ -1,5 +1,6 @@
 require 'java'
 require 'tetris_data'
+require 'block'
 
 import java.awt.Color
 import java.awt.image.BufferedImage
@@ -18,11 +19,12 @@ class TetrisFrame < JFrame
     add_key_listener self
 
     init_frame x, y
+    @x_size = x
+    @y_size = y
 
     @td = TetrisData.new x, y
-    @td.set_block(0, 0)
-    @td.set_block(1, 1)
-    @td.set_block(2, 2)
+    @block = Block.new 0, 1
+    @td.set_block @block
   end
 
   def init_frame(x, y)
@@ -35,7 +37,7 @@ class TetrisFrame < JFrame
 
     case e.get_key_code
     when KeyEvent::VK_RIGHT
-      @td.right_block
+      @td.right_block @block
     end
 
     repaint
@@ -52,8 +54,11 @@ class TetrisFrame < JFrame
     
     @td.image_table.each_with_index do |ex, x|
       ex.each_with_index do |ey, y|
+        if x == 0 or x == @x_size + 1 or y == @y_size + 1
+          next
+        end
         if ey == TetrisData::BLOCK_UNFIXED
-          g.draw_image read_image, x * 200, y * 200, self
+          g.draw_image read_image, (x-1) * 200, y * 200, self
         end
       end
     end

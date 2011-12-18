@@ -8,47 +8,52 @@ class TetrisData
 
   def initialize(x, y)
 
-    raise "Don't set the size of the field as 0." if x == 0 or y ==0
+    raise "Don't set the size of the field as 0." if x <= 0 or y <=0
     init_image_table x, y
 
   end
 
   def init_image_table(x, y)
 
-    @x_size = x - 1
-    @y_size = y - 1
-
-    @image_table = Array.new(x).map! do
-      Array.new(y, 0)
+    @image_table = Array.new(x + 2).map! do
+      Array.new(y + 1, 0)
     end
 
-  end
-
-  def set_block(x, y)
-
-    raise "Don't set minus value. (set >= 0)" if x < 0 or y < 0
-    @image_table[x][y] = BLOCK_UNFIXED
-
-  end
-
-  def right_block
-
-    if !boundary_right?
-      @image_table.each_with_index do |ex, x|
-        ex.each_with_index do |ey, y|
-          if ey == BLOCK_UNFIXED
-            ey = BLOCK_NONE
-            @image_table[x + 1][y] = BLOCK_UNFIXED
-          end
+    @image_table.each_with_index do |ex, ix|
+      ex.each_index do |iy|
+        if ix == 0 or ix == x + 1 or iy == y
+          @image_table[ix][iy] = BLOCK_FIXED
         end
       end
     end
 
   end
 
-  def boundary_right?
+  def set_block(block)
+    @image_table[block.x + 1][block.y] = BLOCK_UNFIXED
+  end
 
-    @image_table[@x_size].index(BLOCK_UNFIXED)
+  def remove_block(block)
+    @image_table[block.x + 1][block.y] = BLOCK_NONE
+  end
+
+  def right_block(block)
+
+    if boundary_right? block
+
+      remove_block block
+      block.move_right
+      set_block block
+
+    end
+
+  end
+
+  def boundary_right?(block)
+
+    xy = block.get_moved_right_points
+    
+    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
 
   end
 
