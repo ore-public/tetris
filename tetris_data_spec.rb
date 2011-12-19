@@ -107,5 +107,103 @@ describe TetrisData do
     end
 
   end
+
+  context 'ブロックの左移動(移動可能)' do
+    before do
+      @td = TetrisData.new 3, 3
+      @block = Block.new 1, 1
+      @td.set_block @block
+      @td.left_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 2, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context 'ブロックの左移動(移動不可)' do
+    before do
+      @td = TetrisData.new 3, 3
+      @block = Block.new 0, 1
+      @td.set_block @block
+      @td.left_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 2, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+
+  end
+  
+  context 'ブロックの下移動(移動可能)' do
+    before do
+      @td = TetrisData.new 3, 3
+      @block = Block.new 0, 1
+      @td.set_block @block
+      @td.down_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 0, 2, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context 'ブロックの下移動(移動不可)' do
+    before do
+      @td = TetrisData.new 3, 3
+      @block = Block.new 2, 2 
+      @td.set_block @block
+      @td.down_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 2, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+
+  end
+  
+  context 'ブロックの上移動(移動可能)' do
+    before do
+      @td = TetrisData.new 3, 3
+      @block = Block.new 0, 1
+      @td.set_block @block
+      @td.up_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [2, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+  end
+
 end
 

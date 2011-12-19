@@ -57,5 +57,65 @@ class TetrisData
 
   end
 
+  def left_block(block)
+
+    if boundary_left? block
+
+      remove_block block
+      block.move_left
+      set_block block
+
+    end
+
+  end
+
+  def boundary_left?(block)
+
+    xy = block.get_moved_left_points
+    
+    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+
+  end
+  
+  def down_block(block)
+
+    if boundary_down? block
+
+      remove_block block
+      block.move_down
+      set_block block
+
+    end
+
+  end
+
+  def boundary_down?(block)
+
+    xy = block.get_moved_down_points
+    
+    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+
+  end
+  
+  def up_block(block)
+
+    if boundary_up? block
+
+      remove_block block
+      block.move_up
+      set_block block
+
+    end
+
+  end
+
+  def boundary_up?(block)
+
+    xy = block.get_moved_up_points
+    
+    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+
+  end
+
 end
 

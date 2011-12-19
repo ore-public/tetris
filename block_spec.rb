@@ -68,5 +68,49 @@ describe Block do
     end
   end
 
+  context '移動(左)' do
+    before do
+      @block = Block.new 1, 1
+      @block.move_left
+    end
+
+    it '右移動時にx座標が-1だけ変化する' do
+      @block.x.should == 0 
+    end
+
+    it '右移動時にy座標が変化しない' do
+      @block.y.should == 1
+    end
+  end
+  
+  context '移動(下)' do
+    before do
+      @block = Block.new 1, 1
+      @block.move_down
+    end
+
+    it '右移動時にx座標が変化しない' do
+      @block.x.should == 1 
+    end
+
+    it '右移動時にy座標が1変化する' do
+      @block.y.should == 2
+    end
+  end
+  
+  context '移動(上)' do
+    before do
+      @block = Block.new 1, 1
+      @block.move_up
+    end
+
+    it '右移動時にx座標が変化しない' do
+      @block.x.should == 1 
+    end
+
+    it '右移動時にy座標が-1変化する' do
+      @block.y.should == 0 
+    end
+  end
 end
 

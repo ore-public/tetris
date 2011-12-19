@@ -38,6 +38,12 @@ class TetrisFrame < JFrame
     case e.get_key_code
     when KeyEvent::VK_RIGHT
       @td.right_block @block
+    when KeyEvent::VK_LEFT
+      @td.left_block @block
+    when KeyEvent::VK_DOWN
+      @td.down_block @block
+    when KeyEvent::VK_UP
+      @td.up_block @block
     end
 
     repaint

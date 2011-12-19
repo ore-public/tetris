@@ -32,4 +32,15 @@ class Block
     @x = @x + 1
   end
 
+  def move_left
+    @x = @x - 1
+  end
+
+  def move_down
+    @y = @y + 1
+  end
+
+  def move_up
+    @y = @y - 1
+  end
 end
