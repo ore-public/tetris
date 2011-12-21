@@ -1,8 +1,8 @@
 class Block
 
-  attr_reader :x, :y
+  attr_reader :x, :y, :sp
 
-  def initialize(x, y)
+  def initialize(x, y, sp = nil)
 
     if x < 0 or y < 0
       raise "X,Y point not set minus value."
@@ -10,6 +10,7 @@ class Block
 
     @x = x
     @y = y
+    @sp = sp
   end
 
   def get_moved_right_points

@@ -23,13 +23,13 @@ class TetrisFrame < JFrame
     @y_size = y
 
     @td = TetrisData.new x, y
-    @block = Block.new 0, 1
+    @block = Block.new 0, 1, [[0, -1], [1, 0], [1, 1]]
     @td.set_block @block
   end
 
   def init_frame(x, y)
 
-    set_bounds 200, 200, x * 200, y * 200
+    set_bounds 200, 200, x * 20, y * 20
 
   end
 
@@ -64,7 +64,7 @@ class TetrisFrame < JFrame
           next
         end
         if ey == TetrisData::BLOCK_UNFIXED
-          g.draw_image read_image, (x-1) * 200, y * 200, self
+          g.draw_image read_image, (x-1) * 20, y * 20, self
         end
       end
     end

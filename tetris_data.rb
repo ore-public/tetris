@@ -29,91 +29,107 @@ class TetrisData
 
   end
 
-  def set_block(block)
-    @image_table[block.x + 1][block.y] = BLOCK_UNFIXED
+  def set_block_status(block, status)
+    center_x = block.x + 1
+    center_y = block.y
+
+    @image_table[center_x][center_y] = status
+    
+    if !block.sp.nil?
+      block.sp.each do |v|
+        @image_table[center_x + v[0]][center_y + v[1]] = status
+      end
+    end
   end
 
+  def set_block(block)
+    set_block_status block, BLOCK_UNFIXED
+  end
+  
   def remove_block(block)
-    @image_table[block.x + 1][block.y] = BLOCK_NONE
+    set_block_status block, BLOCK_NONE
   end
 
   def right_block(block)
 
+    remove_block block
     if boundary_right? block
-
-      remove_block block
       block.move_right
-      set_block block
+    end
+    set_block block
 
+  end
+
+  def boundary?(xy, sp)
+    
+    points = Array.new
+    if !sp.nil?
+      sp.each do |v|
+        points << [xy[0] + v[0] + 1, xy[1] + v[1]]
+      end
+    end
+    points << [xy[0] + 1, xy[1]]
+
+    points.each do |v|
+      if @image_table[v[0]][v[1]] != BLOCK_NONE
+        return false
+      end
     end
 
+    return true
   end
 
   def boundary_right?(block)
 
-    xy = block.get_moved_right_points
-    
-    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+    boundary?(block.get_moved_right_points, block.sp)
 
   end
 
   def left_block(block)
 
+    remove_block block
     if boundary_left? block
-
-      remove_block block
       block.move_left
-      set_block block
-
     end
+    set_block block
 
   end
 
   def boundary_left?(block)
 
-    xy = block.get_moved_left_points
-    
-    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+    boundary?(block.get_moved_left_points, block.sp)
 
   end
   
   def down_block(block)
 
+    remove_block block
     if boundary_down? block
-
-      remove_block block
       block.move_down
-      set_block block
-
     end
+    set_block block
 
   end
 
   def boundary_down?(block)
 
-    xy = block.get_moved_down_points
-    
-    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+    boundary?(block.get_moved_down_points, block.sp)
 
   end
   
   def up_block(block)
 
+    remove_block block
     if boundary_up? block
-
-      remove_block block
       block.move_up
-      set_block block
-
     end
+    set_block block
 
   end
 
   def boundary_up?(block)
 
-    xy = block.get_moved_up_points
-    
-    @image_table[xy[0] + 1][xy[1]] == BLOCK_NONE
+    boundary?(block.get_moved_up_points, block.sp)
 
   end
 

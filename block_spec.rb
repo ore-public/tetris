@@ -3,7 +3,7 @@ require 'block'
 describe Block do
   context '初期化' do
     before do
-      @block = Block.new 0, 1
+      @block = Block.new 0, 1, [[0, -2], [0, -1], [1, 0]]
     end
 
     it '初期化座標xが設定されている' do
@@ -13,6 +13,11 @@ describe Block do
     it '初期化座標yが設定されている' do
       @block.y.should == 1
     end
+
+    it 'ブロック要素の相対座標がセットされている' do
+      @block.sp.should == [[0, -2], [0, -1], [1, 0]]
+    end
+
   end
 
   context '初期化（異常）' do

@@ -205,5 +205,222 @@ describe TetrisData do
     end
   end
 
+  context '複数マスブロックの配置' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+  
+  context '複数マスブロックの右移動' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.right_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context '複数マスブロックの右移動(不可)' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 4, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.right_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context '複数マスブロックの左移動' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.left_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context '複数マスブロックの左移動(不可)' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 0, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.left_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+  context '複数マスブロックの下移動' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.down_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 2, 2, 2, 0, 0, 1],
+        [0, 0, 0, 2, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context '複数マスブロックの下移動(不可)' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 2, 4, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.down_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 2, 2, 2, 1],
+        [0, 0, 0, 0, 0, 2, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+  context '複数マスブロックの上移動' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 2, 2, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.up_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+
+  context '複数マスブロックの上移動(不可)' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block = Block.new 1, 1, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block
+      @td.up_block @block
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
+  context '複数マスブロックの消去' do
+    before do
+      @td = TetrisData.new 6, 6
+      @block1 = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
+      @block2 = Block.new 3, 4, [[0, -1], [0, 1], [1, 1]]
+      @td.set_block @block1
+      @td.set_block @block2
+      @td.remove_block @block1
+    end
+
+    it do
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 2, 2, 2, 1],
+        [0, 0, 0, 0, 0, 2, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+  end
 end
 
