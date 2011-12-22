@@ -205,14 +205,15 @@ describe TetrisData do
     end
   end
 
-  context '複数マスブロックの配置' do
+  context '複数マスブロック' do
     before do
       @td = TetrisData.new 6, 6
-      @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
-      @td.set_block @block
+      @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]], 4
+      @block_d = Block.new 1, 2
     end
 
-    it do
+    it '操作なしでの、配置位置の確認' do
+      @td.set_block @block
       @td.image_table.should == [
         [1, 1, 1, 1, 1, 1, 1],
         [0, 0, 0, 0, 0, 0, 1],
@@ -224,6 +225,109 @@ describe TetrisData do
         [1, 1, 1, 1, 1, 1, 1]
       ]
     end
+
+    it '回転しない場合の複数マス相対座標' do
+      @td.calc_rotate_sp(@block.sp, 0).should ==
+        [[0, -1], [0, 1], [1, 1]]
+    end
+
+    it '1回転後の複数マス相対座標' do
+      @td.calc_rotate_sp(@block.sp, 1).should ==
+        [[1, 0], [-1, 0], [-1, 1]]
+    end
+    
+    it '2回転後の複数マス相対座標' do
+      @td.calc_rotate_sp(@block.sp, 2).should ==
+        [[0, 1], [0, -1], [-1, -1]]
+    end
+
+    it '1回転' do
+      @td.set_block @block
+      @td.rotate_block @block
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 2, 2, 0, 0, 0, 1],
+        [0, 2, 0, 0, 0, 0, 1],
+        [0, 2, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+
+    it '1回転 左に2マス移動(2回目の移動は壁に当たって動けない)' do
+      @td.set_block @block
+      @td.rotate_block @block
+      2.times do
+        @td.left_block @block
+      end
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 2, 2, 0, 0, 0, 1],
+        [0, 2, 0, 0, 0, 0, 1],
+        [0, 2, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+
+    it '2回転' do
+      @td.set_block @block
+      2.times do
+        @td.rotate_block @block
+      end
+
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+
+    it '4回転' do
+      @td.set_block @block
+      4.times do
+        @td.rotate_block @block
+      end
+
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+    end
+
+    it '他のブロックが邪魔で回転出来ない' do
+      @td.set_block @block
+      @td.set_block @block_d
+      @td.rotate_block @block
+
+      @td.image_table.should == [
+        [1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [2, 2, 2, 0, 0, 0, 1],
+        [0, 0, 2, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1]
+      ]
+      
+    end
+
   end
   
   context '複数マスブロックの右移動' do

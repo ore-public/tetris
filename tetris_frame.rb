@@ -23,7 +23,7 @@ class TetrisFrame < JFrame
     @y_size = y
 
     @td = TetrisData.new x, y
-    @block = Block.new 0, 1, [[0, -1], [1, 0], [1, 1]]
+    @block = Block.new 1, 1, [[0, -1], [1, 0], [1, 1]], 4
     @td.set_block @block
   end
 
@@ -43,7 +43,9 @@ class TetrisFrame < JFrame
     when KeyEvent::VK_DOWN
       @td.down_block @block
     when KeyEvent::VK_UP
-      @td.up_block @block
+      @td.rotate_block @block
+    when KeyEvent::VK_ENTER
+      @block = Block.new 1, 1, [[0, -1], [0, 1], [1, 0]], 4
     end
 
     repaint

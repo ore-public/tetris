@@ -36,7 +36,7 @@ class TetrisData
     @image_table[center_x][center_y] = status
     
     if !block.sp.nil?
-      block.sp.each do |v|
+      calc_rotate_sp(block.sp, block.current_r).each do |v|
         @image_table[center_x + v[0]][center_y + v[1]] = status
       end
     end
@@ -60,11 +60,11 @@ class TetrisData
 
   end
 
-  def boundary?(xy, sp)
+  def boundary?(xy, sp, rotate_count)
     
     points = Array.new
     if !sp.nil?
-      sp.each do |v|
+      calc_rotate_sp(sp, rotate_count).each do |v|
         points << [xy[0] + v[0] + 1, xy[1] + v[1]]
       end
     end
@@ -79,9 +79,39 @@ class TetrisData
     return true
   end
 
+  def rotate_block(block)
+    remove_block block
+    if boundary_rotate? block
+      block.rotate
+    end
+    set_block block
+  end
+
+  def boundary_rotate?(block)
+
+    boundary?(
+      [block.x, block.y],
+      block.sp, block.get_rotated_count
+    )
+
+  end
+
+  def calc_rotate_sp(sp, rotate_count)
+
+    return sp if rotate_count == 0
+
+    new_sp = Array.new
+    sp.each_index do |idx|
+      new_sp << [sp[idx][1] * -1, sp[idx][0]]
+    end
+
+    return calc_rotate_sp(new_sp, rotate_count - 1)
+
+  end
+
   def boundary_right?(block)
 
-    boundary?(block.get_moved_right_points, block.sp)
+    boundary?(block.get_moved_right_points, block.sp, block.current_r)
 
   end
 
@@ -97,7 +127,7 @@ class TetrisData
 
   def boundary_left?(block)
 
-    boundary?(block.get_moved_left_points, block.sp)
+    boundary?(block.get_moved_left_points, block.sp, block.current_r)
 
   end
   
@@ -113,7 +143,7 @@ class TetrisData
 
   def boundary_down?(block)
 
-    boundary?(block.get_moved_down_points, block.sp)
+    boundary?(block.get_moved_down_points, block.sp, block.current_r)
 
   end
   
@@ -129,7 +159,7 @@ class TetrisData
 
   def boundary_up?(block)
 
-    boundary?(block.get_moved_up_points, block.sp)
+    boundary?(block.get_moved_up_points, block.sp, block.current_r)
 
   end
 
