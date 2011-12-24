@@ -14,6 +14,7 @@ class TetrisData
   end
 
   def init_image_table(x, y)
+    @y_size = y
 
     @image_table = Array.new(x + 2).map! do
       Array.new(y + 1, 0)
@@ -163,5 +164,57 @@ class TetrisData
 
   end
 
+  def vanish_line(line)
+    
+    if vanish? line
+      set_none_line line
+      true
+    else
+      false
+    end
+
+  end
+
+  def vanish?(line)
+    proc_line do |ex|
+      return false if ex[line] == BLOCK_NONE
+    end
+
+    true
+  end
+
+  def set_none_line(line)
+    proc_line do |ex|
+      ex[line] = BLOCK_NONE
+    end
+  end
+
+  def proc_line
+    @image_table.each_with_index do |ex, ix|
+      next if ix == 0 or ix == @image_table.size - 1
+      yield ex
+    end
+  end
+
+  def down_line(line)
+    line.downto(0) do |iy|
+      proc_line do |ex|
+        if iy == 0
+          ex[iy] = BLOCK_NONE
+        else
+          ex[iy] = ex[iy - 1]
+        end
+      end
+    end
+  end
+  
+  def vanish_down_proc(start_line = (@y_size - 1))
+    start_line.downto(0) do |iy|
+      if vanish_line(iy)
+        down_line(iy)
+        vanish_down_proc iy
+      end
+    end
+  end
 end
 

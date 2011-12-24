@@ -526,5 +526,68 @@ describe TetrisData do
       ]
     end
   end
+
+  context 'ブロックの消滅処理' do
+    before do
+      @td = TetrisData.new 3, 3
+      @block1 = Block.new 1, 2, [[1, 0], [-1, 0]]
+      @block2 = Block.new 1, 1, [[1, 0], [-1, 0]]
+      @block3 = Block.new 0, 0
+
+      @block4 = Block.new 1, 0, [[1, 0], [-1, 0]]
+      @block5 = Block.new 0, 1
+    end
+
+    it '指定行の消滅処理 消滅なし 呼び出し結果がfalse' do
+      @td.set_block @block3
+      @td.vanish_line(0).should be_false
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [2, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+    
+    it '指定行の消滅処理 消滅する 呼び出し結果がtrue' do
+      @td.set_block @block1
+      @td.vanish_line(2).should be_true
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+
+    it '指定行より上の行が、一段したにずれる' do
+      @td.set_block @block2
+      @td.set_block @block3
+      @td.down_line(2)
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 2, 2, 1],
+        [0, 0, 2, 1],
+        [0, 0, 2, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+
+    it '行の消滅処理と、ブロックのずれテスト' do
+      @td.set_block @block1
+      @td.set_block @block4
+      @td.set_block @block5
+      @td.vanish_down_proc
+      @td.image_table.should == [
+        [1, 1, 1, 1],
+        [0, 0, 2, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [1, 1, 1, 1]
+      ]
+    end
+  end
 end
 

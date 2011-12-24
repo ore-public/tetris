@@ -23,8 +23,16 @@ class TetrisFrame < JFrame
     @y_size = y
 
     @td = TetrisData.new x, y
-    @block = Block.new 1, 1, [[0, -1], [1, 0], [1, 1]], 4
-    @td.set_block @block
+    @block_datas = Array.new
+    @block_datas << [1, 1, [[0, -1], [1, 0], [1, 1]], 4]   # T
+    @block_datas << [1, 1, [[0, -1], [0, 1], [1, 1]], 4]   # L
+    @block_datas << [1, 1, [[0, -1], [0, 1], [-1, 1]], 4]  # reverse L
+    @block_datas << [1, 1, [[0, -1], [1, -1], [1, 0]], 0]  # square
+    @block_datas << [1, 1, [[0, -1], [0, 1], [0, 2]], 2]   # tetris
+    @block_datas << [1, 1, [[0, -1], [0, 1], [1, 1]], 2]   # key
+    @block_datas << [1, 1, [[0, -1], [-1, 0], [-1, 1]], 2] # reverse key
+
+    next_block
   end
 
   def init_frame(x, y)
@@ -45,13 +53,20 @@ class TetrisFrame < JFrame
     when KeyEvent::VK_UP
       @td.rotate_block @block
     when KeyEvent::VK_ENTER
-      @block = Block.new 1, 1, [[0, -1], [0, 1], [1, 0]], 4
+      @td.vanish_down_proc
+      next_block
     end
 
     repaint
   end
 
   def keyReleased(e)
+  end
+
+  def next_block
+    block_data = @block_datas[rand(@block_datas.size - 1)]
+    @block = Block.new(block_data[0], block_data[1], block_data[2], block_data[3])
+    @td.set_block @block
   end
 
   def paint(g)
