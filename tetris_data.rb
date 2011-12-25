@@ -134,12 +134,16 @@ class TetrisData
   
   def down_block(block)
 
+    ret_flg = true
     remove_block block
     if boundary_down? block
       block.move_down
+    else
+      ret_flg = false
     end
     set_block block
 
+    return ret_flg
   end
 
   def boundary_down?(block)

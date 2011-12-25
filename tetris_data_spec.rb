@@ -422,10 +422,10 @@ describe TetrisData do
       @td = TetrisData.new 6, 6
       @block = Block.new 2, 1, [[0, -1], [0, 1], [1, 1]]
       @td.set_block @block
-      @td.down_block @block
     end
 
     it do
+      @td.down_block(@block).should be_true
       @td.image_table.should == [
         [1, 1, 1, 1, 1, 1, 1],
         [0, 0, 0, 0, 0, 0, 1],
@@ -444,10 +444,10 @@ describe TetrisData do
       @td = TetrisData.new 6, 6
       @block = Block.new 2, 4, [[0, -1], [0, 1], [1, 1]]
       @td.set_block @block
-      @td.down_block @block
     end
 
     it do
+      @td.down_block(@block).should be_false
       @td.image_table.should == [
         [1, 1, 1, 1, 1, 1, 1],
         [0, 0, 0, 0, 0, 0, 1],

@@ -6,8 +6,10 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.awt.event.KeyListener
 import java.awt.event.KeyEvent
+import java.awt.event.ActionListener
 import java.io.File
 import javax.swing.JFrame
+import javax.swing.Timer
 import javax.imageio.ImageIO
 
 class TetrisFrame < JFrame
@@ -24,15 +26,35 @@ class TetrisFrame < JFrame
 
     @td = TetrisData.new x, y
     @block_datas = Array.new
-    @block_datas << [1, 1, [[0, -1], [1, 0], [1, 1]], 4]   # T
+    @block_datas << [1, 1, [[0, -1], [1, 0], [0, 1]], 4]   # T
     @block_datas << [1, 1, [[0, -1], [0, 1], [1, 1]], 4]   # L
     @block_datas << [1, 1, [[0, -1], [0, 1], [-1, 1]], 4]  # reverse L
     @block_datas << [1, 1, [[0, -1], [1, -1], [1, 0]], 0]  # square
     @block_datas << [1, 1, [[0, -1], [0, 1], [0, 2]], 2]   # tetris
-    @block_datas << [1, 1, [[0, -1], [0, 1], [1, 1]], 2]   # key
+    @block_datas << [1, 1, [[0, -1], [1, 0], [1, 1]], 2]   # key
     @block_datas << [1, 1, [[0, -1], [-1, 0], [-1, 1]], 2] # reverse key
 
+    @down_count = 100
+
     next_block
+
+    down_timer = Timer.new(10, nil)
+    down_timer.add_action_listener do |e|
+      @down_count = @down_count - 1
+
+      if @down_count <= 0
+        if !@td.down_block @block
+          @td.vanish_down_proc
+          next_block
+        end
+
+        repaint
+        @down_count = 100
+      end
+    end
+
+    down_timer.start
+
   end
 
   def init_frame(x, y)
@@ -49,12 +71,9 @@ class TetrisFrame < JFrame
     when KeyEvent::VK_LEFT
       @td.left_block @block
     when KeyEvent::VK_DOWN
-      @td.down_block @block
+      @down_count = 0
     when KeyEvent::VK_UP
       @td.rotate_block @block
-    when KeyEvent::VK_ENTER
-      @td.vanish_down_proc
-      next_block
     end
 
     repaint
