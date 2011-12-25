@@ -23,6 +23,8 @@ class TetrisFrame < JFrame
     init_frame x, y
     @x_size = x
     @y_size = y
+    
+    @read_image = ImageIO.read File.new("block.bmp")
 
     @td = TetrisData.new x, y
     @block_datas = Array.new
@@ -83,16 +85,22 @@ class TetrisFrame < JFrame
   end
 
   def next_block
-    block_data = @block_datas[rand(@block_datas.size - 1)]
+    block_data = @block_datas[rand(@block_datas.size)]
     @block = Block.new(block_data[0], block_data[1], block_data[2], block_data[3])
     @td.set_block @block
   end
 
-  def paint(g)
-    g.set_background Color::PINK
-    g.clear_rect 0, 0, get_width, get_height
+  def update(g)
+    paint(g)
+  end
 
-    read_image = ImageIO.read File.new("block.bmp")
+  def paint(g)
+
+    off_i = create_image(@x_size*20, @y_size*20)
+    off_g = off_i.get_graphics
+    off_g.set_background Color::PINK
+    off_g.clear_rect 0, 0, get_width, get_height
+
     
     @td.image_table.each_with_index do |ex, x|
       ex.each_with_index do |ey, y|
@@ -100,11 +108,12 @@ class TetrisFrame < JFrame
           next
         end
         if ey == TetrisData::BLOCK_UNFIXED
-          g.draw_image read_image, (x-1) * 20, y * 20, self
+          off_g.draw_image @read_image, (x-1) * 20, y * 20, self
         end
       end
     end
 
+    g.draw_image off_i, 0, 0, self
   end
 
 end
