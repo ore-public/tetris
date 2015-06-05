@@ -1,3 +1,4 @@
+#com
 require 'tetris_frame'
 
 tframe = TetrisFrame.new "テトリス", 10, 20
