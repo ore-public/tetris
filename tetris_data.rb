@@ -1,3 +1,4 @@
+#
 class TetrisData
 
   BLOCK_NONE = 0
