@@ -1,4 +1,4 @@
-#
+#block data class
 class TetrisData
 
   BLOCK_NONE = 0
