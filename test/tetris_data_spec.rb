@@ -1,6 +1,3 @@
-require 'tetris_data'
-require 'block'
-
 describe TetrisData do
   context '初期化(正常時)' do
     before do
