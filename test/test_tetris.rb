@@ -1,7 +1,7 @@
-class TestTetris < MTest::Unit::TestCase
-  def test_main
-    assert_nil __main__([])
-  end
-end
+# class TestTetris < MTest::Unit::TestCase
+#   def test_main
+#     assert_nil __main__([])
+#   end
+# end
 
-MTest::Unit.new.run
+# MTest::Unit.new.run
