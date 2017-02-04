@@ -1,6 +1,6 @@
 require 'java'
-require 'tetris_data'
-require 'block'
+require './tetris_data'
+require './block'
 
 import java.awt.Color
 import java.awt.image.BufferedImage
