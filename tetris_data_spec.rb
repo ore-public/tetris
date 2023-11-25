@@ -1,5 +1,5 @@
-require 'tetris_data'
-require 'block'
+require './tetris_data'
+require './block'
 
 describe TetrisData do
   context '初期化(正常時)' do
@@ -425,7 +425,7 @@ describe TetrisData do
     end
 
     it do
-      @td.down_block(@block).should be_true
+      expect(@td.down_block(@block)).to be true
       @td.image_table.should == [
         [1, 1, 1, 1, 1, 1, 1],
         [0, 0, 0, 0, 0, 0, 1],
@@ -447,7 +447,7 @@ describe TetrisData do
     end
 
     it do
-      @td.down_block(@block).should be_false
+      expect(@td.down_block(@block)).to be false
       @td.image_table.should == [
         [1, 1, 1, 1, 1, 1, 1],
         [0, 0, 0, 0, 0, 0, 1],
@@ -540,7 +540,7 @@ describe TetrisData do
 
     it '指定行の消滅処理 消滅なし 呼び出し結果がfalse' do
       @td.set_block @block3
-      @td.vanish_line(0).should be_false
+      expect(@td.vanish_line(0)).to be false
       @td.image_table.should == [
         [1, 1, 1, 1],
         [2, 0, 0, 1],
@@ -552,7 +552,7 @@ describe TetrisData do
     
     it '指定行の消滅処理 消滅する 呼び出し結果がtrue' do
       @td.set_block @block1
-      @td.vanish_line(2).should be_true
+      expect(@td.vanish_line(2)).to be true
       @td.image_table.should == [
         [1, 1, 1, 1],
         [0, 0, 0, 1],

@@ -1,4 +1,4 @@
-require 'block'
+require './block'
 
 describe Block do
   context '初期化 1マスブロック' do
